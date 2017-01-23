@@ -7,4 +7,4 @@
 #Set environment variable
 environment=$1
 
-echo "hello, today is $(date)" > /tmp/jenkins_test
+echo "hello, today is $(date) + $environment" > /tmp/jenkins_test
