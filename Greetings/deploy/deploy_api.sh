@@ -28,10 +28,10 @@ authorizerFunctionArn=$(aws cloudformation describe-stacks --stack-name $securit
 rm -rf /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-swagger.yaml
 
 #Substitute authorizer function ARN placeholder in the template swagger file
-sed -e "s/\${authorizerFunctionArn}/$authorizerFunctionArn/" /home/moshtan/AWS_dir/Projects/Greetings/deploy/greetings-swagger-base.yaml > /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-swagger.yaml
+sed -e "s/\${authorizerFunctionArn}/$authorizerFunctionArn/" /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-swagger-base.yaml > /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-swagger.yaml
 
 #Package the code
-aws cloudformation package --template-file /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-api-cf-template.yaml --output-template-file /home/moshtan/AWS_dir/Projects/Greetings/deploy/greetings-api-cf.yaml --s3-bucket iw-code-repository --s3-prefix greetings
+aws cloudformation package --template-file /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-api-cf-template.yaml --output-template-file /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-api-cf.yaml --s3-bucket iw-code-repository --s3-prefix greetings
 
 #Deploy api stack
 aws cloudformation deploy --template-file /var/lib/jenkins/Projects/first-repo/Greetings/deploy/greetings-api-cf.yaml --stack-name $api_stack_name --capabilities CAPABILITY_IAM --parameter-overrides SecurityStackName=$security_stack_name Prefix="Hi There!" Suffix="Nice job!"
