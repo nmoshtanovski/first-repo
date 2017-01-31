@@ -1,0 +1,26 @@
+[
+  {
+    "ParameterKey": "OktaAuthenticationApiUrl",
+    "ParameterValue": "https://dev-816827.oktapreview.com/api/v1/authn"
+  },
+  {
+    "ParameterKey": "OktaAuthorizationApiUrl",
+    "ParameterValue": "https://dev-816827.oktapreview.com/oauth2/aus9d75t4rxxzOKyo0h7/v1/authorize"
+  },
+  {
+    "ParameterKey": "ClientId",
+    "ParameterValue": "rpqHwm1gbtVDjfuptnc3"
+  },
+  {
+    "ParameterKey": "Issuer",
+    "ParameterValue": "https://dev-816827.oktapreview.com/oauth2/aus9d75t4rxxzOKyo0h7"
+  },
+  {
+    "ParameterKey": "Scope",
+    "ParameterValue": "openid profile Greetings"
+  },
+  {
+    "ParameterKey": "Keys",
+    "ParameterValue": "eyJrZXlzIjpbeyJhbGciOiJSUzI1NiIsImUiOiJBUUFCIiwibiI6ImtLek43enk3UUxIU0k0QW5qY2FJbFduSEpGUnFxR0U4NmdvVTdIblJzcUY2TzFGNkhWdnM0NEljYkxqdXl3VlpjYmpuS0hmYVQya25BQ1FfUU1JVEJoMVJPd3dqbEZEcEhjaVlhZDAwa3VycU9Kb1pDdTdISU1kdmtpVno4TUNMTEZrTkZZVkF2alJhdjJDMXIzWUpUdkdPZ1hpRU5oRWRHMHVsa01WUjlxeVlvNlZiMHVsM1BzQlYtaEtadjhDbWx6WjNsYnNrYlZ3QUp1UURxR1U3enB6OHBDRkNYV05FS2oycHJHV3NYZEFPNFJ0djk2bmdzTTVTeXlzcXhveGp0WGR1czh1bEdENDFLT1NvZjNIcVg4c0hxc0RmUDJyNHR6aTJBT2RqWU5WdjRUX01CNGxndjEtQ2FvUEZBSEczNmhVU3JiTXpGd0J5RWd1MVlncDhYdyIsImtpZCI6Im5rSGlFRjBrdERvTm9CRUJjTm9NUmtDQm5YaERKLUU1dEdUM1prcldGeXciLCJrdHkiOiJSU0EiLCJ1c2UiOiJzaWcifV19"
+  }
+]

@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  SecurityStackName:
+    Type: String
+    Description: Security Stack Name.
+  Prefix:
+    Type: String
+    Description: Prefix in the Greetings message.
+  Suffix:
+    Type: String
+    Description: Suffix in the Greetings message.
+Resources:
+  #Define API functions
+  GreetingsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: Greetings.handler
+      Runtime: nodejs4.3
+      Timeout: 300
+      CodeUri: ../dist/code
+      Policies:
+        - AWSLambdaVPCAccessExecutionRole
+      Environment:
+        Variables:
+          Prefix: !Ref Prefix
+          Suffix: !Ref Suffix
+  #Define the API
+  GreetingsApi:
+    Type: AWS::Serverless::Api
+    DependsOn:
+      - GreetingsFunction
+    Properties:
+      DefinitionUri: ./greetings-swagger.yaml
+      StageName: api
+      Variables:
+        GreetingsFunctionName: !Ref GreetingsFunction
+
+  #Add permissions to the Lambda functions that allow API Gateway access
+  GrettingsFunctionApiGatewayExecutionPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - GreetingsFunction
+      - GreetingsApi
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt GreetingsFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Join
+        - ''
+        - - 'arn:aws:execute-api:'
+          - !Ref 'AWS::Region'
+          - ':'
+          - !Ref 'AWS::AccountId'
+          - ':'
+          - !Ref GreetingsApi
+          - '/*/*'
+  AuthorizerFunctionApiGatewayExecutionPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - GreetingsApi
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::ImportValue:
+          !Sub "${SecurityStackName}-AuthorizerFunctionArn"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Join
+        - ''
+        - - 'arn:aws:execute-api:'
+          - !Ref 'AWS::Region'
+          - ':'
+          - !Ref 'AWS::AccountId'
+          - ':'
+          - !Ref GreetingsApi
+          - '/*/*'
+Outputs:
+  GreetingsFunctionArn:
+    Description: 'Greetings function Arn'
+    Value: !GetAtt GreetingsFunction.Arn
+  GreetingsApiIdentifier:
+    Description: 'Greetings API Identifier'
+    Value: !Ref GreetingsApi

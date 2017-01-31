@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Outputs:
+  GreetingsApiIdentifier:
+    Description: Greetings API Identifier
+    Value:
+      Ref: GreetingsApi
+  GreetingsFunctionArn:
+    Description: Greetings function Arn
+    Value:
+      Fn::GetAtt:
+      - GreetingsFunction
+      - Arn
+Parameters:
+  Prefix:
+    Description: Prefix in the Greetings message.
+    Type: String
+  SecurityStackName:
+    Description: Security Stack Name.
+    Type: String
+  Suffix:
+    Description: Suffix in the Greetings message.
+    Type: String
+Resources:
+  AuthorizerFunctionApiGatewayExecutionPermission:
+    DependsOn:
+    - GreetingsApi
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::ImportValue:
+          Fn::Sub: ${SecurityStackName}-AuthorizerFunctionArn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:'
+          - Ref: AWS::Region
+          - ':'
+          - Ref: AWS::AccountId
+          - ':'
+          - Ref: GreetingsApi
+          - /*/*
+    Type: AWS::Lambda::Permission
+  GreetingsApi:
+    DependsOn:
+    - GreetingsFunction
+    Properties:
+      DefinitionUri: s3://iw-code-repository/greetings/af266408d2ab61ad1a9d47339b1e6531
+      StageName: api
+      Variables:
+        GreetingsFunctionName:
+          Ref: GreetingsFunction
+    Type: AWS::Serverless::Api
+  GreetingsFunction:
+    Properties:
+      CodeUri: s3://iw-code-repository/greetings/66d7c5fd0fbbb512051f8a6567c2bc69
+      Environment:
+        Variables:
+          Prefix:
+            Ref: Prefix
+          Suffix:
+            Ref: Suffix
+      Handler: Greetings.handler
+      Policies:
+      - AWSLambdaVPCAccessExecutionRole
+      Runtime: nodejs4.3
+      Timeout: 300
+    Type: AWS::Serverless::Function
+  GrettingsFunctionApiGatewayExecutionPermission:
+    DependsOn:
+    - GreetingsFunction
+    - GreetingsApi
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - GreetingsFunction
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:'
+          - Ref: AWS::Region
+          - ':'
+          - Ref: AWS::AccountId
+          - ':'
+          - Ref: GreetingsApi
+          - /*/*
+    Type: AWS::Lambda::Permission
+Transform: AWS::Serverless-2016-10-31

@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  OktaAuthenticationApiUrl:
+    Type: String
+    Description: 'Okta Authentication API URL.'
+  OktaAuthorizationApiUrl:
+    Type: String
+    Description: 'Okta Authorization API URL.'
+  ClientId:
+    Type: String
+    Description: 'Application Client Id.'
+  Issuer:
+      Type: String
+      Description: 'Scope and claims issuer (this is an id of the authorization server).'
+  Scope:
+      Type: String
+      Description: 'Space separated Scopes requested from the authorization server (openid and profile are required).'
+  Keys:
+      Type: String
+      Description: 'Json Web Token validation keys (base64 encoded JSON structure).'
+Resources:
+  GreetingsOktaCustomAuthorizerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: aws-okta-custom-authorizer.handler
+      Runtime: nodejs4.3
+      CodeUri: s3://iw-code-repository/common/aws-okta-custom-authorizer_latest.zip
+      Environment:
+        Variables:
+          OKTA_AUTH_API_URL: !Ref OktaAuthenticationApiUrl
+          OKTA_AUTHZ_API_URL: !Ref OktaAuthorizationApiUrl
+          CLIENT_ID: !Ref ClientId
+          ISSUER: !Ref Issuer
+          SCOPE: !Ref Scope
+          KEYS: !Ref Keys
+Outputs:
+  AuthorizerFunctionArn:
+    Description: 'Greetings API Okta Custom Authorizer Function Arn'
+    Value: !GetAtt GreetingsOktaCustomAuthorizerFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-AuthorizerFunctionArn"

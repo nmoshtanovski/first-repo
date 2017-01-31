@@ -1,0 +1,21 @@
+{
+  "name": "greetings",
+  "version": "1.0.0",
+  "description": "Greetings API demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "InterWorks",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^4.0.0",
+    "grunt": "^1.0.1",
+    "grunt-aws-lambda": "^0.13.0",
+    "grunt-cli": "^1.2.0",
+    "npm": "^4.1.1"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0"
+  }
+}

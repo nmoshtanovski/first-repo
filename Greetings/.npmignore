@@ -1,0 +1,10 @@
+dist
+deploy
+event.json
+.env
+Gruntfile.js
+greetings-swagger.yaml
+greetings-cf-template.yaml
+greetings-cf.yaml
+*.txt
+*.bat
